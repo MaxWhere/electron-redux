@@ -1,7 +1,8 @@
 import { webContents } from 'electron';
 import validateAction from '../helpers/validateAction';
 
-const forwardToRenderer = () => next => (action) => {
+export const forwardToRendererWithParams = (params = {}) => store => next => action => {
+  const { selector = () => true, storeid = '' } = params;
   if (!validateAction(action)) return next(action);
   if (action.meta && action.meta.scope === 'local') return next(action);
 
@@ -14,13 +15,15 @@ const forwardToRenderer = () => next => (action) => {
     },
   };
 
-  const allWebContents = webContents.getAllWebContents();
+  const allWebContents = webContents.getAllWebContents().filter(selector);
 
-  allWebContents.forEach((contents) => {
-    contents.send('redux-action', rendererAction);
+  allWebContents.forEach(contents => {
+    contents.send(`redux-action-${storeid || 'all'}`, rendererAction);
   });
 
   return next(action);
 };
+
+const forwardToRenderer = forwardToRendererWithParams(); // default
 
 export default forwardToRenderer;

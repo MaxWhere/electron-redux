@@ -1,5 +1,5 @@
 import forwardToMain, { forwardToMainWithParams } from './middleware/forwardToMain';
-import forwardToRenderer from './middleware/forwardToRenderer';
+import forwardToRenderer, { forwardToRendererWithParams } from './middleware/forwardToRenderer';
 import triggerAlias from './middleware/triggerAlias';
 import createAliasedAction from './helpers/createAliasedAction';
 import replayActionMain from './helpers/replayActionMain';
@@ -10,6 +10,7 @@ export {
   forwardToMain,
   forwardToMainWithParams,
   forwardToRenderer,
+  forwardToRendererWithParams,
   triggerAlias,
   createAliasedAction,
   replayActionMain,
