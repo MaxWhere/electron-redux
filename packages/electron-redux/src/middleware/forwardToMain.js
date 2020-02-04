@@ -3,7 +3,7 @@ import validateAction from '../helpers/validateAction';
 
 // eslint-disable-next-line consistent-return, no-unused-vars
 export const forwardToMainWithParams = (params = {}) => store => next => action => {
-  const { blacklist = [] } = params;
+  const { blacklist = [], storeid = '' } = params;
   if (!validateAction(action)) return next(action);
   if (action.meta && action.meta.scope === 'local') return next(action);
 
@@ -12,7 +12,7 @@ export const forwardToMainWithParams = (params = {}) => store => next => action 
   }
 
   // stop action in-flight
-  ipcRenderer.send('redux-action', action);
+  ipcRenderer.send(`redux-action-${storeid || 'all'}`, action);
 };
 
 const forwardToMain = forwardToMainWithParams({
